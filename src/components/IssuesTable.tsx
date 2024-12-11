@@ -4,10 +4,11 @@ import axios from 'axios';
 export default function PriorityIssues() {
     const [data, setData] = useState<SampleData | null>(null)
     const [filteredData, setFilteredData] = useState<SampleData | null>(null)
-    const [currentFilter, setCurrentFilter] = useState({status: '', priority: '', type: ''})
+    const [typeFilter, setTypeFilter] = useState<string>('')
+    const [statusFilter, setStatusFilter] = useState<string>('')
+    const [priorityFilter, setPriorityFilter] = useState<string>('')
     useEffect(() => {
         let mounted = true;
-
         const fetchData = async () => {
             try {
                 const { data: allData } = await axios.get<SampleData>('/api/data', {
@@ -38,12 +39,16 @@ export default function PriorityIssues() {
 
         return () => { mounted = false; }
     }, [])  
-    
+    useEffect(() => {
+        applyFilter();
+    }, [typeFilter, priorityFilter, statusFilter]);
     const applyFilter = () => {
+        // Apply the filter
         if (data) {
             const filtered = data.results.filter(issue => {
-                return (currentFilter.status ? issue.status === currentFilter.status : true)
-                && (currentFilter.priority ? issue.priority === currentFilter.priority : true)
+                return (typeFilter ? issue.type === typeFilter : true)
+                    && (priorityFilter ? issue.priority === priorityFilter : true)
+                    && (statusFilter ? issue.status === statusFilter : true)
             });
             setFilteredData({ results: filtered });
 
@@ -59,15 +64,25 @@ export default function PriorityIssues() {
                 <div className="">
                     <p className="text-2xl font-bold">All Issues</p>
                 </div>
-                <div>
-                    <button 
-                        onClick={() => {
-                            setCurrentFilter({ status: 'open', priority: 'high', type: ''});
-                            applyFilter();
-                        }} 
-                        className="border-4">
-                        Filter by</button>
+                <div className="p-3 space-x-2">
+                    Type
+                    <button className="ml-3" onClick={() => setTypeFilter('problem')}>Problems</button>
+                    <button className="" onClick={() => setTypeFilter('question')}>Questions</button>
+                    <button className="" onClick={() => setTypeFilter('task')}>Tasks</button>
                 </div>
+                <div className="p-3 space-x-2">
+                    Priority
+                    <button className="ml-3" onClick={() => setPriorityFilter('high')}>High</button>
+                    <button className="" onClick={() => setPriorityFilter('normal')}>Normal</button>
+                    <button className="" onClick={() => setPriorityFilter('low')}>Low</button>
+                </div>
+                <div className="p-3 space-x-2">
+                    Status
+                    <button className="ml-3" onClick={() => setTypeFilter('problem')}>Open</button>
+                    <button className="" onClick={() => setTypeFilter('pending')}>Pending</button>
+                    <button className="" onClick={() => setTypeFilter('closed')}>Closed</button>
+                </div>
+                
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-grey-50">
                         <tr>
@@ -85,9 +100,8 @@ export default function PriorityIssues() {
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{issue.assignee_id}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{issue.created}</td>
                             </tr>
-
-                            
                         ))}
+                        
                     </tbody>
                 </table>
                 <div>Total Issues: {data.results.length}</div>
@@ -97,7 +111,5 @@ export default function PriorityIssues() {
 }
 
 const styles = {
-
     margin: '0 auto', 
-    padding: '20px',
 }

@@ -24,7 +24,7 @@ export const backend_tasks = async () => {
     }
     // Task 1 & 2: percentages
     let problemC = 0, questionC = 0, taskC = 0;
-    let lowC = 0, mediumC = 0, highC = 0;
+    let lowC = 0, normalC = 0, highC = 0;
     let timeTotal = 0
     let satScore = ""
     let highestTime = 0
@@ -35,7 +35,7 @@ export const backend_tasks = async () => {
         if (issue.type === 'task') taskC++;
 
         if (issue.priority === 'low') lowC++;
-        if (issue.priority === 'normal') mediumC++;
+        if (issue.priority === 'normal') normalC++;
         if (issue.priority === 'high') highC++;
         
         // Task 3: Average closing time
@@ -60,20 +60,20 @@ export const backend_tasks = async () => {
     // Should be 500, but we'll check the length and compare with that anyway
     let totalC = allData.results.length
 
-    const problemP = (problemC / totalC) * 100;
-    const questionP = (questionC / totalC) * 100;
-    const taskP = (taskC / totalC) * 100;
+    const problemP = ((problemC / totalC) * 100).toFixed(1);
+    const questionP = ((questionC / totalC) * 100).toFixed(1);
+    const taskP = ((taskC / totalC) * 100).toFixed(1);
 
-    const lowP = (lowC / totalC) * 100;
-    const mediumP = (mediumC / totalC) * 100;
-    const highP = (highC / totalC) * 100;
+    const lowP = ((lowC / totalC) * 100).toFixed(1);
+    const normalP = ((normalC / totalC) * 100).toFixed(1);
+    const highP = ((highC / totalC) * 100).toFixed(1);;
 
-    const averageClosingTime = timeTotal / totalC
+    const averageClosingTimeMins = (timeTotal / totalC).toFixed(1);
 
     //Now constructing the JSON to return
 
     const result = {
-        average_closing_time: averageClosingTime,
+        average_closing_time: averageClosingTimeMins,
         type_percentages: {
             problem: problemP,
             question: questionP,
@@ -81,7 +81,7 @@ export const backend_tasks = async () => {
         },
         priority_percentages: {
             low: lowP,
-            medium: mediumP,
+            medium: normalP,
             high: highP,
         },
         longest_close_satisfaction_score: satScore

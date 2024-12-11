@@ -8,27 +8,22 @@ const queryClient = new QueryClient()
 function App() {
     return (
         <QueryClientProvider client={queryClient}>
-            <div className='p-4'>
-                <h1 className='mb-4 text-3xl'>Welcome to the Service Desk Dashboard!</h1>
-                
+            <div className="ml-5">
+                <div className='mt-5'>
+                    <h1 className='mb-4 text-3xl'>Welcome to the Service Desk Dashboard!</h1>
+                    
+                </div>
+                <div style={{textAlign: 'left'}}>
+                    <AllIssues/>
+                </div>
+                <div>
+                    <BackendTasks/>
+                </div>
             </div>
-            <div style={styles.priorityIssues}>
-                <AllIssues/>
-            </div>
-            <div>
-                <BackendTasks/>
-            </div>
-
         </QueryClientProvider>
     )
 }
 
 
-
-const styles: { priorityIssues: CSSProperties } = {
-    priorityIssues: {
-        textAlign: 'left',
-    }
-} 
 
 export default App
