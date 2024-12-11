@@ -26,7 +26,7 @@ export const backend_tasks = async () => {
     let problemC = 0, questionC = 0, taskC = 0;
     let lowC = 0, mediumC = 0, highC = 0;
     let timeTotal = 0
-    let satScore = 0;
+    let satScore = ""
     let highestTime = 0
 
     allData.results.forEach(issue => {
@@ -51,7 +51,7 @@ export const backend_tasks = async () => {
         minuteDifference = differenceMS / (1000 * 60);
         // Task 4: Get satisfaction score of issue with highest time to close
         if (minuteDifference > highestTime) {
-            satScore = parseInt(issue.satisfaction_rating.score)
+            satScore = issue.satisfaction_rating.score
         }
         timeTotal += minuteDifference;
     });
