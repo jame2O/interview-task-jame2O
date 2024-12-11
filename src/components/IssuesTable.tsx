@@ -50,15 +50,16 @@ export default function PriorityIssues() {
                 return (typeFilter ? issue.type === typeFilter : true)
                     && (priorityFilter ? issue.priority === priorityFilter : true)
                     && (statusFilter ? issue.status === statusFilter : true)
+                    && (searchInput ? issue.organization_id.includes(searchInput) : true)
             });
             setFilteredData({ results: filtered });
         }
     }
     useEffect(() => {
         applyFilter();
-    }, [typeFilter, priorityFilter, statusFilter]);
+    }, [typeFilter, priorityFilter, statusFilter, searchInput]);
 
-    //Rendering
+    //Rendering stuff
     if (!data) {
         return "Loading Issues..."
     }

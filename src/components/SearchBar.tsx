@@ -6,7 +6,7 @@ export default function SearchBar({searchInput, setSearchInput}:{searchInput: st
         const checkBounceback = setTimeout(() => {
             console.log(textChanged)
             setSearchInput(textChanged);
-        }, 1000);
+        }, 500);
 
         return () => {
             clearTimeout(checkBounceback)
