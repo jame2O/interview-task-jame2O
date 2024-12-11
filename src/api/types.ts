@@ -1,3 +1,5 @@
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+
 export interface SampleData {
     results: {
         id: number;
@@ -24,4 +26,11 @@ export interface SampleData {
         };
         ticket_form_id: string;
     }[];
+}
+
+export type TicketProp = {
+    name: string,
+    icon: IconProp,
+    iconColour: string
+    count: number
 }
