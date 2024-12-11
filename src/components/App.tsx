@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from "react-query"
 import Data from "./Data"
-import PriorityIssues from "./PriorityIssues"
+import AllIssues from "./AllIssues"
+import HighPriorityProblems from "./HighPriorityProblems";
+import BackendTasks from "./BackendTasks";
 import { CSSProperties } from 'react';
 const queryClient = new QueryClient()
 
@@ -12,7 +14,10 @@ function App() {
                 
             </div>
             <div style={styles.priorityIssues}>
-                <PriorityIssues/>
+                <AllIssues/>
+            </div>
+            <div>
+                <BackendTasks/>
             </div>
 
         </QueryClientProvider>

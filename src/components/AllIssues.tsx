@@ -17,7 +17,6 @@ export default function PriorityIssues() {
                         status: "",
                     }
                 })
-                console.log(allData)
                 if (mounted) {
                     // Sort the data here
                     const prioritiesAsInt: any = { "low": 1, "medium": 2, "high": 3}

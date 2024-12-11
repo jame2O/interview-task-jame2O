@@ -4,7 +4,6 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { mockData } from '../mockData';
 import { wrapper } from '../utils';
-import { queryAllIssues } from 'utils/fetch';
 
 const server = setupServer(
     http.get('/api/data', () => {
