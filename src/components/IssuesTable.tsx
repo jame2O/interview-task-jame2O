@@ -22,7 +22,7 @@ export default function PriorityIssues() {
                 if (mounted) {
                     // Sort the data here
                     const prioritiesAsInt: any = { "low": 1, "normal": 2, "high": 3}
-                    
+
                     const sortedData = {
                         ...allData,
                         issues: allData.results.sort((a, b) => prioritiesAsInt[a.priority] - prioritiesAsInt[b.priority]).reverse()
@@ -38,10 +38,7 @@ export default function PriorityIssues() {
         fetchData();
 
         return () => { mounted = false; }
-    }, [])  
-    useEffect(() => {
-        applyFilter();
-    }, [typeFilter, priorityFilter, statusFilter]);
+    }, [])
     const applyFilter = () => {
         // Apply the filter
         if (data) {
@@ -54,6 +51,10 @@ export default function PriorityIssues() {
 
         }
     }
+    useEffect(() => {
+        applyFilter();
+    }, [typeFilter, priorityFilter, statusFilter]);
+
     //Rendering
     if (!data) {
         return "Loading Issues..."
@@ -64,25 +65,25 @@ export default function PriorityIssues() {
                 <div className="">
                     <p className="text-2xl font-bold">All Issues</p>
                 </div>
-                <div className="p-3 space-x-2">
+                <div className="space-x-2 p-3">
                     Type
                     <button className="ml-3" onClick={() => setTypeFilter('problem')}>Problems</button>
                     <button className="" onClick={() => setTypeFilter('question')}>Questions</button>
                     <button className="" onClick={() => setTypeFilter('task')}>Tasks</button>
                 </div>
-                <div className="p-3 space-x-2">
+                <div className="space-x-2 p-3">
                     Priority
                     <button className="ml-3" onClick={() => setPriorityFilter('high')}>High</button>
                     <button className="" onClick={() => setPriorityFilter('normal')}>Normal</button>
                     <button className="" onClick={() => setPriorityFilter('low')}>Low</button>
                 </div>
-                <div className="p-3 space-x-2">
+                <div className="space-x-2 p-3">
                     Status
                     <button className="ml-3" onClick={() => setTypeFilter('problem')}>Open</button>
                     <button className="" onClick={() => setTypeFilter('pending')}>Pending</button>
                     <button className="" onClick={() => setTypeFilter('closed')}>Closed</button>
                 </div>
-                
+
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-grey-50">
                         <tr>
@@ -92,16 +93,16 @@ export default function PriorityIssues() {
                             <th>Created On</th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white dividy-y divide-gray-200">
+                    <tbody className="dividy-y divide-gray-200 bg-white">
                         {filteredData && filteredData.results.map((issue) => (
                             <tr key={issue.id}>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{issue.subject}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{issue.priority}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{issue.assignee_id}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{issue.created}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.subject}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.priority}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.assignee_id}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.created}</td>
                             </tr>
                         ))}
-                        
+
                     </tbody>
                 </table>
                 <div>Total Issues: {data.results.length}</div>
@@ -111,5 +112,5 @@ export default function PriorityIssues() {
 }
 
 const styles = {
-    margin: '0 auto', 
+    margin: '0 auto',
 }
