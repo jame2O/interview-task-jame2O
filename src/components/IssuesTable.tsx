@@ -11,8 +11,12 @@ import TicketOverview from "./TicketOverview";
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
 import { faCircleStop } from "@fortawesome/free-solid-svg-icons";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons/faCircleXmark";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
+import { faListCheck } from "@fortawesome/free-solid-svg-icons";
+
 export default function PriorityIssues() {
     const [data, setData] = useState<SampleData | null>(null)
     const [filteredData, setFilteredData] = useState<SampleData | null>(null)
@@ -79,6 +83,10 @@ export default function PriorityIssues() {
     const lowCount = filteredData?.results.filter(issue => issue.priority === 'low').length || 0;
     const normalCount = filteredData?.results.filter(issue => issue.priority === 'question').length || 0;
     const highCount = filteredData?.results.filter(issue => issue.priority === 'task').length || 0;
+
+    const capitalise = (str: string) => {
+        return str.charAt(0).toUpperCase() + str.slice(1)
+    }
     //Rendering stuff
     if (!data) {
         return "Loading Issues..."
@@ -86,10 +94,8 @@ export default function PriorityIssues() {
     return (
         <>
             <div style={styles}>
-                <div className="">
-                    <p className="text-2xl font-bold">All Issues</p>
-                </div>
-                <div className="flex justify-between">
+
+                <div className="flex justify-between mb-5">
                     <TicketOverview title="Status" props={[
                         {
                             name: "Open",
@@ -113,40 +119,40 @@ export default function PriorityIssues() {
                     <TicketOverview title="Type" props={[
                         {
                             name: "Problem",
-                            icon: faCircleInfo,
+                            icon: faCircleXmark,
                             iconColour: "red",
                             count: problemCount
                         },
                         {
                             name: "Question",
-                            icon: faCircleStop,
+                            icon: faCircleQuestion,
                             iconColour: "gold",
                             count: questionCount
                         },
                         {
                             name: "Task",
-                            icon: faCircleCheck,
-                            iconColour: "green",
+                            icon: faListCheck,
+                            iconColour: "",
                             count: taskCount
                         },
                     ]}/>
                     <TicketOverview title="Priority" props={[
                         {
                             name: "Low",
-                            icon: faCircleInfo,
-                            iconColour: "red",
+                            icon: faCircleExclamation,
+                            iconColour: "green",
                             count: lowCount
                         },
                         {
                             name: "Normal",
-                            icon: faCircleStop,
+                            icon: faCircleExclamation,
                             iconColour: "gold",
                             count: normalCount
                         },
                         {
                             name: "High",
-                            icon: faCircleCheck,
-                            iconColour: "green",
+                            icon: faCircleExclamation,
+                            iconColour: "red",
                             count: highCount
                         },
                     ]}/>
@@ -172,28 +178,28 @@ export default function PriorityIssues() {
                     searchInput={searchInput}
                     setSearchInput={setSearchInput}    
                 />
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-grey-50">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead className="text xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th>Issue</th>
-                            <th>Type</th>
-                            <th>Priority</th>
-                            <th>Status</th>
-                            <th>Assignee</th>
-                            <th>Organiztion ID</th>
-                            <th>Created On</th>
+                            <th className="px-6 py-3">Issue</th>
+                            <th className="px-6 py-3">Type</th>
+                            <th className="px-6 py-3">Priority</th>
+                            <th className="px-6 py-3">Status</th>
+                            <th className="px-6 py-3">Assignee</th>
+                            <th className="px-6 py-3">Organiztion ID</th>
+                            <th className="px-6 py-3">Created On</th>
                         </tr>
                     </thead>
-                    <tbody className="dividy-y divide-gray-200 bg-white">
+                    <tbody>
                         {filteredData && filteredData.results.map((issue) => (
-                            <tr key={issue.id}>
-                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.subject}</td>
-                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.type}</td>
-                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.priority}</td>
-                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.status}</td>
-                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.assignee_id}</td>
-                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.organization_id}</td>
-                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.created}</td>
+                            <tr key={issue.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td className="px-6 py-4">{capitalise(issue.subject)}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.type)}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 font-bold">{capitalise(issue.priority)}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.status)}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.assignee_id)}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.organization_id)}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.created)}</td>
                             </tr>
                         ))}
 

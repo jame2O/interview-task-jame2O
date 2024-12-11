@@ -8,7 +8,6 @@ export default function TicketOverview({title, props}: {title: string, props: Ti
                 <div className="flex justify-between">
                     {props.map((ticket, index) => (
                         <div key={index} className="flex items-center">
-                            <span className="mx-2">{ticket.name}</span>
                             <FontAwesomeIcon className="mx-2" icon={ticket.icon} color={ticket.iconColour} size="3x"/>
                             <span className="mx-2">{ticket.count}</span>
                         </div>
