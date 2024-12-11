@@ -19,10 +19,11 @@ export default function PriorityIssues() {
                 })
                 if (mounted) {
                     // Sort the data here
-                    const prioritiesAsInt: any = { "low": 1, "medium": 2, "high": 3}
+                    const prioritiesAsInt: any = { "low": 1, "normal": 2, "high": 3}
+                    
                     const sortedData = {
                         ...allData,
-                        issues: allData.results.sort((a, b) => prioritiesAsInt[a.priority] - prioritiesAsInt[b.priority])
+                        issues: allData.results.sort((a, b) => prioritiesAsInt[a.priority] - prioritiesAsInt[b.priority]).reverse()
                     }
                     console.log(sortedData)
                     setData(sortedData)
