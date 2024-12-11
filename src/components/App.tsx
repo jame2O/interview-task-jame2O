@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from "react-query"
 import Data from "./Data"
-import AllIssues from "./AllIssues"
-import HighPriorityProblems from "./HighPriorityProblems";
+import AllIssues from "./IssuesTable"
 import BackendTasks from "./BackendTasks";
 import { CSSProperties } from 'react';
 const queryClient = new QueryClient()

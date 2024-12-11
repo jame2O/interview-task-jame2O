@@ -3,7 +3,8 @@ import { SampleData } from "api/types";
 import axios from 'axios';
 export default function PriorityIssues() {
     const [data, setData] = useState<SampleData | null>(null)
-
+    const [filteredData, setFilteredData] = useState<SampleData | null>(null)
+    const [currentFilter, setCurrentFilter] = useState({status: '', priority: '', type: ''})
     useEffect(() => {
         let mounted = true;
 
@@ -27,6 +28,7 @@ export default function PriorityIssues() {
                     }
                     console.log(sortedData)
                     setData(sortedData)
+                    setFilteredData(sortedData)
                 }
             } catch (error) {
                 console.error('Failed to fetch data', error);
@@ -36,7 +38,18 @@ export default function PriorityIssues() {
 
         return () => { mounted = false; }
     }, [])  
+    
+    const applyFilter = () => {
+        if (data) {
+            const filtered = data.results.filter(issue => {
+                return (currentFilter.status ? issue.status === currentFilter.status : true)
+                && (currentFilter.priority ? issue.priority === currentFilter.priority : true)
+            });
+            setFilteredData({ results: filtered });
 
+        }
+    }
+    //Rendering
     if (!data) {
         return "Loading Issues..."
     }
@@ -44,8 +57,16 @@ export default function PriorityIssues() {
         <>
             <div style={styles}>
                 <div className="">
-                    <p className="text-2xl font-bold">All Problems</p>
-                    Filter By:
+                    <p className="text-2xl font-bold">All Issues</p>
+                </div>
+                <div>
+                    <button 
+                        onClick={() => {
+                            setCurrentFilter({ status: 'open', priority: 'high', type: ''});
+                            applyFilter();
+                        }} 
+                        className="border-4">
+                        Filter by</button>
                 </div>
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-grey-50">
@@ -57,7 +78,7 @@ export default function PriorityIssues() {
                         </tr>
                     </thead>
                     <tbody className="bg-white dividy-y divide-gray-200">
-                        {data.results.map((issue) => (
+                        {filteredData && filteredData.results.map((issue) => (
                             <tr key={issue.id}>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{issue.subject}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{issue.priority}</td>
@@ -76,7 +97,7 @@ export default function PriorityIssues() {
 }
 
 const styles = {
-    maxWidth: '800px', 
+
     margin: '0 auto', 
     padding: '20px',
 }
