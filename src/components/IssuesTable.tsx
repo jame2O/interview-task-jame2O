@@ -3,6 +3,7 @@ import { SampleData } from "api/types";
 import axios from 'axios';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FilterOptions from "./FilterOptions";
+import SearchBar from "./SearchBar";
 export default function PriorityIssues() {
     const [data, setData] = useState<SampleData | null>(null)
     const [filteredData, setFilteredData] = useState<SampleData | null>(null)
@@ -10,6 +11,7 @@ export default function PriorityIssues() {
     const [statusFilter, setStatusFilter] = useState<string>('')
     const [priorityFilter, setPriorityFilter] = useState<string>('')
     const [showFilterPopup, setShowFilterPopup] = useState<boolean>(false);
+    const [searchInput, setSearchInput] = useState('')
     useEffect(() => {
         let mounted = true;
         const fetchData = async () => {
@@ -83,6 +85,10 @@ export default function PriorityIssues() {
                         />
                     </div>
                 )}
+                <SearchBar
+                    searchInput={searchInput}
+                    setSearchInput={setSearchInput}    
+                />
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-grey-50">
                         <tr>
@@ -90,6 +96,7 @@ export default function PriorityIssues() {
                             <th>Type</th>
                             <th>Priority</th>
                             <th>Assignee</th>
+                            <th>Organiztion ID</th>
                             <th>Created On</th>
                         </tr>
                     </thead>
@@ -100,6 +107,7 @@ export default function PriorityIssues() {
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.type}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.priority}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.assignee_id}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.organization_id}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.created}</td>
                             </tr>
                         ))}
