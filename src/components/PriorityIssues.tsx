@@ -9,11 +9,15 @@ export default function PriorityIssues() {
 
         const fetchData = async () => {
             try {
-                const { data: allData } = await axios.post<SampleData>('/api/data', {
-                    datapoints: '100',
-                    type: 'problem'
+                const { data: allData } = await axios.get<SampleData>('/api/data', {
+                    params: {
+                        datapoints: 100,
+                        type: "",
+                        priority: "",
+                        status: "",
+                    }
                 })
-                
+                console.log(allData)
                 if (mounted) {
                     // Sort the data here
                     const prioritiesAsInt: any = { "low": 1, "medium": 2, "high": 3}
@@ -21,8 +25,8 @@ export default function PriorityIssues() {
                         ...allData,
                         issues: allData.results.sort((a, b) => prioritiesAsInt[a.priority] - prioritiesAsInt[b.priority])
                     }
-                    
-                    setData(allData)
+                    console.log(sortedData)
+                    setData(sortedData)
                 }
             } catch (error) {
                 console.error('Failed to fetch data', error);
@@ -39,7 +43,10 @@ export default function PriorityIssues() {
     return (
         <>
             <div style={styles}>
-                <div className="border p-4">Issues in order of priority: </div>
+                <div className="">
+                    <p className="text-2xl font-bold">All Problems</p>
+                    Filter By:
+                </div>
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-grey-50">
                         <tr>
@@ -71,5 +78,5 @@ export default function PriorityIssues() {
 const styles = {
     maxWidth: '800px', 
     margin: '0 auto', 
-    padding: '20px'
+    padding: '20px',
 }
