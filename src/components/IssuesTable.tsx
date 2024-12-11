@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { SampleData } from "api/types";
 import axios from 'axios';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FilterOptions from "./FilterOptions";
 export default function PriorityIssues() {
     const [data, setData] = useState<SampleData | null>(null)
     const [filteredData, setFilteredData] = useState<SampleData | null>(null)
     const [typeFilter, setTypeFilter] = useState<string>('')
     const [statusFilter, setStatusFilter] = useState<string>('')
     const [priorityFilter, setPriorityFilter] = useState<string>('')
+    const [showFilterPopup, setShowFilterPopup] = useState<boolean>(false);
     useEffect(() => {
         let mounted = true;
         const fetchData = async () => {
@@ -21,8 +24,7 @@ export default function PriorityIssues() {
                 })
                 if (mounted) {
                     // Sort the data here
-                    const prioritiesAsInt: any = { "low": 1, "normal": 2, "high": 3}
-
+                    const prioritiesAsInt: any = { "low": 1, "normal": 2, "high": 3 }
                     const sortedData = {
                         ...allData,
                         issues: allData.results.sort((a, b) => prioritiesAsInt[a.priority] - prioritiesAsInt[b.priority]).reverse()
@@ -36,7 +38,7 @@ export default function PriorityIssues() {
             }
         }
         fetchData();
-
+                                                  
         return () => { mounted = false; }
     }, [])
     const applyFilter = () => {
@@ -48,7 +50,6 @@ export default function PriorityIssues() {
                     && (statusFilter ? issue.status === statusFilter : true)
             });
             setFilteredData({ results: filtered });
-
         }
     }
     useEffect(() => {
@@ -65,29 +66,28 @@ export default function PriorityIssues() {
                 <div className="">
                     <p className="text-2xl font-bold">All Issues</p>
                 </div>
-                <div className="space-x-2 p-3">
-                    Type
-                    <button className="ml-3" onClick={() => setTypeFilter('problem')}>Problems</button>
-                    <button className="" onClick={() => setTypeFilter('question')}>Questions</button>
-                    <button className="" onClick={() => setTypeFilter('task')}>Tasks</button>
-                </div>
-                <div className="space-x-2 p-3">
-                    Priority
-                    <button className="ml-3" onClick={() => setPriorityFilter('high')}>High</button>
-                    <button className="" onClick={() => setPriorityFilter('normal')}>Normal</button>
-                    <button className="" onClick={() => setPriorityFilter('low')}>Low</button>
-                </div>
-                <div className="space-x-2 p-3">
-                    Status
-                    <button className="ml-3" onClick={() => setTypeFilter('problem')}>Open</button>
-                    <button className="" onClick={() => setTypeFilter('pending')}>Pending</button>
-                    <button className="" onClick={() => setTypeFilter('closed')}>Closed</button>
-                </div>
-
+                <button 
+                    onClick={() => setShowFilterPopup(!showFilterPopup)}
+                    className="absolute top-0 right-0 bg-blue-500 text-white px-4 py-2 rounded">
+                    <FontAwesomeIcon icon={"filter"} size="xl"/>
+                    </button>
+                {showFilterPopup && (
+                    <div className="absolute top-12 right-0 bg-white shadow-lg p-4 rounded">
+                        <FilterOptions
+                            typeFilter={typeFilter}
+                            setTypeFilter={setTypeFilter}
+                            priorityFilter={priorityFilter}
+                            setStatusFilter={setStatusFilter}
+                            statusFilter={statusFilter}
+                            setPriorityFilter={setPriorityFilter}
+                        />
+                    </div>
+                )}
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-grey-50">
                         <tr>
                             <th>Issue</th>
+                            <th>Type</th>
                             <th>Priority</th>
                             <th>Assignee</th>
                             <th>Created On</th>
@@ -97,6 +97,7 @@ export default function PriorityIssues() {
                         {filteredData && filteredData.results.map((issue) => (
                             <tr key={issue.id}>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.subject}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.type}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.priority}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.assignee_id}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{issue.created}</td>
