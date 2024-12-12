@@ -49,7 +49,6 @@ export default function IssuesTable() {
                         ...allData,
                         results: allData.results.sort((a, b) => prioritiesAsInt[a.priority as keyof typeof prioritiesAsInt] - prioritiesAsInt[b.priority as keyof typeof prioritiesAsInt]).reverse()
                     }
-                    console.log(sortedData)
                     setData(sortedData)
                     //By default, filtered data just contains all of the sorted data.
                     setFilteredData(sortedData)
@@ -70,7 +69,7 @@ export default function IssuesTable() {
                 return (typeFilter ? issue.type === typeFilter : true) // Type checks
                     && (priorityFilter ? issue.priority === priorityFilter : true) //Priority checks
                     && (statusFilter ? issue.status === statusFilter : true) // Status checks
-                    && (searchInput ? issue.organization_id.includes(searchInput) : true) // Search Bar (org id) checks
+                    && (searchInput ? issue.organization_id.toLowerCase().includes(searchInput.toLowerCase()) : true) // Search Bar (org id) checks
             });
             setFilteredData({ results: filtered }); //Update the f.data state once were done
         }
@@ -98,7 +97,7 @@ export default function IssuesTable() {
     const lowCount = filteredData?.results.filter(issue => issue.priority === 'low').length || 0;
     const normalCount = filteredData?.results.filter(issue => issue.priority === 'normal').length || 0;
     const highCount = filteredData?.results.filter(issue => issue.priority === 'high').length || 0;
-
+    // Satisfaction score counts
     const goodCount = filteredData?.results.filter(issue => issue.satisfaction_rating.score === 'good').length || 0;
     const badCount = filteredData?.results.filter(issue => issue.satisfaction_rating.score === 'bad').length || 0;
 

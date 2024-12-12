@@ -35,7 +35,9 @@ export default function FilterOptions(
                 <button className={`ml-3 rounded-lg border-2 p-1 ${typeFilter === 'task' ? 'rounded-lg border-2 border-blue-500 p-1' : ''}`} onClick={() => setTypeFilter('task')}>Tasks</button>
                 <button className={`ml-3 rounded-lg border-2 p-1 ${typeFilter === '' ? 'rounded-lg border-2 border-blue-500 p-1' : ''}`} onClick={() => setTypeFilter('')}>All</button>
             </div>
+
             <div className='border'/>
+            
             <div className="space-x-4 p-3">
                 <p className="font-bold">Priority</p>
                 <button className={`ml-3 rounded-lg border-2 p-1 ${priorityFilter === 'high' ? 'rounded-lg border-2 border-blue-500 p-1' : 'p-1'}`} onClick={() => setPriorityFilter('high')}>High</button>
