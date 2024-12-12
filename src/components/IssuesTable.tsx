@@ -47,8 +47,9 @@ export default function IssuesTable() {
                     const prioritiesAsInt: {"low": number, "normal": number, "high": number} = { "low": 1, "normal": 2, "high": 3 }
                     const sortedData = {
                         ...allData,
-                        issues: allData.results.sort((a, b) => prioritiesAsInt[a.priority as keyof typeof prioritiesAsInt] - prioritiesAsInt[b.priority as keyof typeof prioritiesAsInt]).reverse()
+                        results: allData.results.sort((a, b) => prioritiesAsInt[a.priority as keyof typeof prioritiesAsInt] - prioritiesAsInt[b.priority as keyof typeof prioritiesAsInt]).reverse()
                     }
+                    console.log(sortedData)
                     setData(sortedData)
                     //By default, filtered data just contains all of the sorted data.
                     setFilteredData(sortedData)
