@@ -22,6 +22,7 @@ import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { faCopy } from "@fortawesome/free-solid-svg-icons"
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { faThumbsDown } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function IssuesTable() {
     const [data, setData] = useState<SampleData | null>(null)
@@ -126,20 +127,20 @@ export default function IssuesTable() {
                     <TicketOverview title="Status" props={[
                         {
                             name: "Open / New",
-                            icon: faCircleInfo,
-                            iconColour: "#CC0000",
+                            icon: faCirclePlus,
+                            iconColour: "#1B1B1B",
                             count: openCount
                         },
                         {
                             name: "Pending / Hold",
                             icon: faCircleStop,
-                            iconColour: "#FEBE10",
+                            iconColour: "#1B1B1B",
                             count: pendingCount
                         },
                         {
                             name: "Closed / Solved",
                             icon: faCircleCheck,
-                            iconColour: "green",
+                            iconColour: "#1B1B1B",
                             count: closedCount
                         },
                     ]}/>
@@ -147,19 +148,19 @@ export default function IssuesTable() {
                         {
                             name: "Problem / Incident",
                             icon: faTriangleExclamation,
-                            iconColour: '#CC0000',
+                            iconColour: '#1B1B1B',
                             count: problemCount
                         },
                         {
                             name: "Question",
                             icon: faQuestion,
-                            iconColour: "#FEBE10",
+                            iconColour: "#1B1B1B",
                             count: questionCount
                         },
                         {
                             name: "Task",
                             icon: faListCheck,
-                            iconColour: "#03594D",
+                            iconColour: "#1B1B1B",
                             count: taskCount
                         },
                     ]}/>

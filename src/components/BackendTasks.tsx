@@ -28,7 +28,7 @@ export default function BackendTasks() {
     }, [])
     return (
         <>
-            <div>
+            <div className="border-2 border-grey-500 p-2 rounded-lg bg-gray-100">
                 <a href={`/api/insights/data?datapoints=500&type=&priority=&status=`}>
                     <button>Show backend tasks</button>
                 </a>
