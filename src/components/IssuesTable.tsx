@@ -9,15 +9,17 @@ import TicketOverview from "./TicketOverview";
 //Importing FA Icons
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { faCircleStop } from "@fortawesome/free-solid-svg-icons";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons/faCircleXmark";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
+import { faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { faListCheck } from "@fortawesome/free-solid-svg-icons";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
-export default function PriorityIssues() {
+export default function IssuesTable() {
     const [data, setData] = useState<SampleData | null>(null)
     const [filteredData, setFilteredData] = useState<SampleData | null>(null)
     const [typeFilter, setTypeFilter] = useState<string>('')
@@ -87,7 +89,24 @@ export default function PriorityIssues() {
     const capitalise = (str: string) => {
         return str.charAt(0).toUpperCase() + str.slice(1)
     }
-    //Rendering stuff
+    //Event listener to hide the filter component if a user clicks off
+    useEffect(() => {
+
+    })
+    //Case function for determining colour of priority column values in table
+    const getPriorityColour = (priority: string) => {
+        switch (priority) {
+            case 'low':
+                return 'text-green-500'
+            case 'normal':
+                return 'text-yellow-500'
+            case 'high':
+                return 'text-red-500'
+            default:
+                return 'text-gray-500'
+        }
+    }
+    //Rendering
     if (!data) {
         return "Loading Issues..."
     }
@@ -100,13 +119,13 @@ export default function PriorityIssues() {
                         {
                             name: "Open",
                             icon: faCircleInfo,
-                            iconColour: "red",
+                            iconColour: "#CC0000",
                             count: openCount
                         },
                         {
                             name: "Pending",
                             icon: faCircleStop,
-                            iconColour: "gold",
+                            iconColour: "#FEBE10",
                             count: pendingCount
                         },
                         {
@@ -119,20 +138,20 @@ export default function PriorityIssues() {
                     <TicketOverview title="Type" props={[
                         {
                             name: "Problem",
-                            icon: faCircleXmark,
-                            iconColour: "red",
+                            icon: faTriangleExclamation,
+                            iconColour: '#CC0000',
                             count: problemCount
                         },
                         {
                             name: "Question",
-                            icon: faCircleQuestion,
-                            iconColour: "gold",
+                            icon: faQuestion,
+                            iconColour: "#FEBE10",
                             count: questionCount
                         },
                         {
                             name: "Task",
                             icon: faListCheck,
-                            iconColour: "",
+                            iconColour: "#03594D",
                             count: taskCount
                         },
                     ]}/>
@@ -146,38 +165,40 @@ export default function PriorityIssues() {
                         {
                             name: "Normal",
                             icon: faCircleExclamation,
-                            iconColour: "gold",
+                            iconColour: "#FEBE10",
                             count: normalCount
                         },
                         {
                             name: "High",
                             icon: faCircleExclamation,
-                            iconColour: "red",
+                            iconColour: "#CC0000",
                             count: highCount
                         },
                     ]}/>
                 </div>
-                <button 
-                    onClick={() => setShowFilterPopup(!showFilterPopup)}
-                    className="absolute top-0 right-0 bg-blue-500 text-white px-4 py-2 rounded">
-                    <FontAwesomeIcon icon={"filter"} size="xl"/>
-                    </button>
-                {showFilterPopup && (
-                    <div className="absolute top-12 right-0 bg-white shadow-lg p-4 rounded">
-                        <FilterOptions
-                            typeFilter={typeFilter}
-                            setTypeFilter={setTypeFilter}
-                            priorityFilter={priorityFilter}
-                            setStatusFilter={setStatusFilter}
-                            statusFilter={statusFilter}
-                            setPriorityFilter={setPriorityFilter}
-                        />
-                    </div>
-                )}
-                <SearchBar
-                    searchInput={searchInput}
-                    setSearchInput={setSearchInput}    
-                />
+                <div className="flex items-center space-x-4 mb-4">
+                    <button 
+                        onClick={() => setShowFilterPopup(!showFilterPopup)}
+                        className="top-0 right-0 bg-blue-500 text-white px-4 py-2 rounded">
+                        <FontAwesomeIcon icon={faFilter} size="2x"/>
+                        </button>
+                    {showFilterPopup && (
+                        <div className="absolute  p-4 rounded">
+                            <FilterOptions
+                                typeFilter={typeFilter}
+                                setTypeFilter={setTypeFilter}
+                                priorityFilter={priorityFilter}
+                                setStatusFilter={setStatusFilter}
+                                statusFilter={statusFilter}
+                                setPriorityFilter={setPriorityFilter}
+                            />
+                        </div>
+                    )}
+                    <SearchBar
+                        searchInput={searchInput}
+                        setSearchInput={setSearchInput}    
+                    />
+                </div>
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -189,21 +210,31 @@ export default function PriorityIssues() {
                             <th className="px-6 py-3">Organiztion ID</th>
                             <th className="px-6 py-3">Created On</th>
                         </tr>
+                        <th colSpan={1} className="whitespace-nowrap px-6 py-4 text-base text-gray-500 font-bold">Total Issues: {filteredData?.results.length}</th>
                     </thead>
                     <tbody>
-                        {filteredData && filteredData.results.map((issue) => (
+                        {filteredData && filteredData.results.length > 0 ? (
+                            filteredData.results.map((issue) => (
                             <tr key={issue.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <td className="px-6 py-4">{capitalise(issue.subject)}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.type)}</td>
-                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 font-bold">{capitalise(issue.priority)}</td>
+                                <td className={`whitespace-nowrap px-6 py-4 text-sm font-bold ${getPriorityColour(issue.priority)}`}>{capitalise(issue.priority)}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.status)}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.assignee_id)}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.organization_id)}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.created)}</td>
                             </tr>
-                        ))}
+                        ))
+                        ) : ( 
+                            <tr>
+                                <td colSpan={7} className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 font-bold">No data from selected filters.</td>
+                            </tr>
+                        )}
 
                     </tbody>
+                    <tfoot>
+                        
+                    </tfoot>
                 </table>
             </div>
         </>

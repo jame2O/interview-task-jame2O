@@ -1,23 +1,24 @@
 import { SampleData } from "api/types";
 import axios from 'axios';
+import { Request, Response } from 'express';
 
-export const backend_tasks = async () => {
-    // Step 1: Get Data:
-    let allData: SampleData;
+const DATA_URL = 'https://sampleapi.squaredup.com/integrations/v1/service-desk';
+
+export const GET = async (req: Request, res: Response) => {
+    const { datapoints, type, priority, status } = req.query;
+    
     try {
-        const response = await axios.get<SampleData>('/api/insights/data', {
-            params: {
-                datapoints: 500,
-                type: "",
-                priority: "",
-                status: "",
-            }
-        })
-        allData = response.data;
+        const { data } = await axios.get<SampleData>(`${DATA_URL}?type=${type}&priority=${priority}&status=${status}&datapoints=${datapoints}`)
+        const processed_data = await backend_tasks(data)
+        res.send(processed_data)
     } catch (error) {
-        console.error('Failed to fetch data', error);
-        return;
+        res.status(500).send({error: 'Failed to fetch requested data'})
     }
+}
+
+
+export const backend_tasks = async (allData: SampleData) => {
+    // Step 1: Get Data:
     if (!allData) {
         console.error('No data recieved')
         return;
@@ -86,6 +87,5 @@ export const backend_tasks = async () => {
         },
         longest_close_satisfaction_score: satScore
     }
-
     return (result)
 }
