@@ -7,6 +7,7 @@ import SearchBar from "./SearchBar";
 import TicketOverview from "./TicketOverview";
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import { Tooltip } from 'react-tooltip'
+
 //Importing FA Icons
 
 import { faFilter } from "@fortawesome/free-solid-svg-icons";

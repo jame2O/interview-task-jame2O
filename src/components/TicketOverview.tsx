@@ -6,7 +6,7 @@ export default function TicketOverview({title, props}: {title: string, props: Ti
     return (
         <>  
             <div className="mx-auto max-w-lg rounded-lg border border-gray-300 bg-white p-4">
-                <h1 className="mx-auto mb-4 text-center text-2xl font-bold italic">{title} Overview</h1>
+                <h1 className="mx-auto mb-4 text-center text-2xl font-bold">{title} Overview</h1>
                 <div className="flex justify-between">
                     {props.map((ticket, index) => (
                         <div key={index} className="flex items-center">
