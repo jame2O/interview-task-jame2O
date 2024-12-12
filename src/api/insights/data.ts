@@ -18,10 +18,12 @@ export const GET = async (req: Request, res: Response) => {
 
 
 export const backend_tasks = async (allData: SampleData) => {
+
     if (!allData) {
         console.error('No data recieved')
         return;
     }
+
     // Task 1 & 2: percentages
     let problemC = 0, questionC = 0, taskC = 0;
     let lowC = 0, normalC = 0, highC = 0;
@@ -31,6 +33,7 @@ export const backend_tasks = async (allData: SampleData) => {
     // Custom tasks: Number of tasks per assignee and organization
     const assigneeTasks: { name: string; tasks: number }[] = []
     const orgTasks: { name: string; tasks: number }[] = []
+
     allData.results.forEach(issue => {
         if (issue.type === 'problem' || issue.type === 'incident') problemC++;
         if (issue.type === 'question') questionC++;
@@ -51,6 +54,7 @@ export const backend_tasks = async (allData: SampleData) => {
 
         const differenceMS = updatedTime.getTime() - createdTime.getTime()
         minuteDifference = differenceMS / (1000 * 60);
+        
         // Task 4: Get satisfaction score of issue with highest time to close
         if (minuteDifference > highestTime) {
             satScore = issue.satisfaction_rating.score

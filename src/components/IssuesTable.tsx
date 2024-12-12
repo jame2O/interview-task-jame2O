@@ -31,6 +31,7 @@ export default function IssuesTable() {
 
     const [searchInput, setSearchInput] = useState('')
     useEffect(() => {
+        
         let mounted = true;
         const fetchData = async () => {
             try {

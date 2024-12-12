@@ -15,7 +15,7 @@ function App() {
                                 width={75}
                                 />                            
                         </a>
-                        <h1 className='mb-4 text-3xl'>Welcome to the Service Desk Dashboard!</h1>
+                        <h1 className='ml-5 mb-4 text-3xl'>Welcome to the Service Desk Dashboard!</h1>
                     </div>
                     <div className="mr-5">
                         <BackendTasks/>
