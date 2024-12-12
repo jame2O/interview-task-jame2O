@@ -6,8 +6,8 @@ const queryClient = new QueryClient()
 function App() {
     return (
         <QueryClientProvider client={queryClient}>
-            <div className="ml-5 mr-5">
-                <div className='mt-5 flex items-center space-x-5 justify-between'>
+            <div className="mx-5">
+                <div className='mt-5 flex items-center justify-between space-x-5'>
                     <div className='flex items-center'>
                         <a href="https://squaredup.com/">
                             <img 

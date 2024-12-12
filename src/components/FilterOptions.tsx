@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-import DateTimePicker from 'react-datetime-picker';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export default function FilterOptions(
@@ -22,7 +20,7 @@ export default function FilterOptions(
 } ) {
     return (
         
-        <div className="bg-white shadow-lg p-4 rounded">
+        <div className="rounded bg-white p-4 shadow-lg">
             <div className="flex justify-between">
                 <h1 className="font-bold italic">Add Filters</h1>
                 <button onClick={() => setShowFilterPopup(!showFilterPopup)}>
@@ -30,30 +28,30 @@ export default function FilterOptions(
                 </button>
             </div>
             
-            <div className="p-3 space-x-4">
+            <div className="space-x-4 p-3">
                 <p className="font-bold">Type</p>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${typeFilter === 'problem' ? 'p-1 border-2 border-blue-500 rounded-lg' : ''}`} onClick={() => setTypeFilter('problem')}>Problems</button>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${typeFilter === 'question' ? 'p-1 border-2 border-blue-500 rounded-lg' : ''}`} onClick={() => setTypeFilter('question')}>Questions</button>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${typeFilter === 'task' ? 'p-1 border-2 border-blue-500 rounded-lg' : ''}`} onClick={() => setTypeFilter('task')}>Tasks</button>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${typeFilter === '' ? 'p-1 border-2 border-blue-500 rounded-lg' : ''}`} onClick={() => setTypeFilter('')}>All</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${typeFilter === 'problem' ? 'rounded-lg border-2 border-blue-500 p-1' : ''}`} onClick={() => setTypeFilter('problem')}>Problems</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${typeFilter === 'question' ? 'rounded-lg border-2 border-blue-500 p-1' : ''}`} onClick={() => setTypeFilter('question')}>Questions</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${typeFilter === 'task' ? 'rounded-lg border-2 border-blue-500 p-1' : ''}`} onClick={() => setTypeFilter('task')}>Tasks</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${typeFilter === '' ? 'rounded-lg border-2 border-blue-500 p-1' : ''}`} onClick={() => setTypeFilter('')}>All</button>
             </div>
             <div className='border'/>
-            <div className="p-3 space-x-4">
+            <div className="space-x-4 p-3">
                 <p className="font-bold">Priority</p>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${priorityFilter === 'high' ? 'p-1 border-2 border-blue-500 rounded-lg' : 'p-1'}`} onClick={() => setPriorityFilter('high')}>High</button>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${priorityFilter === 'normal' ? 'p-1 border-2 border-blue-500 rounded-lg' : 'p-1'}`} onClick={() => setPriorityFilter('normal')}>Normal</button>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${priorityFilter === 'low' ? 'p-1 border-2 border-blue-500 rounded-lg' : 'p-1'}`} onClick={() => setPriorityFilter('low')}>Low</button>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${priorityFilter === '' ? 'p-1 border-2 border-blue-500 rounded-lg' : 'p-1'}`} onClick={() => setPriorityFilter('')}>All</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${priorityFilter === 'high' ? 'rounded-lg border-2 border-blue-500 p-1' : 'p-1'}`} onClick={() => setPriorityFilter('high')}>High</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${priorityFilter === 'normal' ? 'rounded-lg border-2 border-blue-500 p-1' : 'p-1'}`} onClick={() => setPriorityFilter('normal')}>Normal</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${priorityFilter === 'low' ? 'rounded-lg border-2 border-blue-500 p-1' : 'p-1'}`} onClick={() => setPriorityFilter('low')}>Low</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${priorityFilter === '' ? 'rounded-lg border-2 border-blue-500 p-1' : 'p-1'}`} onClick={() => setPriorityFilter('')}>All</button>
             </div>
             <div className='border'/>
-            <div className="p-3 space-x-4">
+            <div className="space-x-4 p-3">
                 <p className="font-bold">Status</p>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${statusFilter === 'open' ? 'p-1 border-2 border-blue-500 rounded-lg' : 'p-1'}`} onClick={() => setStatusFilter('open')}>Open</button>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${statusFilter === 'new' ? 'p-1 border-2 border-blue-500 rounded-lg' : 'p-1'}`} onClick={() => setStatusFilter('new')}>New</button>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${statusFilter === 'pending' ? 'p-1 border-2 border-blue-500 rounded-lg' : 'p-1'}`} onClick={() => setStatusFilter('pending')}>Pending</button>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${statusFilter === 'solved' ? 'p-1 border-2 border-blue-500 rounded-lg' : 'p-1'}`} onClick={() => setStatusFilter('solved')}>Solved</button>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${statusFilter === 'closed' ? 'p-1 border-2 border-blue-500 rounded-lg' : 'p-1'}`} onClick={() => setStatusFilter('closed')}>Closed</button>
-                <button className={`ml-3 p-1 border-2 rounded-lg ${statusFilter === '' ? 'p-1 border-2 border-blue-500 rounded-lg' : 'p-1'}`} onClick={() => setStatusFilter('')}>All</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${statusFilter === 'open' ? 'rounded-lg border-2 border-blue-500 p-1' : 'p-1'}`} onClick={() => setStatusFilter('open')}>Open</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${statusFilter === 'new' ? 'rounded-lg border-2 border-blue-500 p-1' : 'p-1'}`} onClick={() => setStatusFilter('new')}>New</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${statusFilter === 'pending' ? 'rounded-lg border-2 border-blue-500 p-1' : 'p-1'}`} onClick={() => setStatusFilter('pending')}>Pending</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${statusFilter === 'solved' ? 'rounded-lg border-2 border-blue-500 p-1' : 'p-1'}`} onClick={() => setStatusFilter('solved')}>Solved</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${statusFilter === 'closed' ? 'rounded-lg border-2 border-blue-500 p-1' : 'p-1'}`} onClick={() => setStatusFilter('closed')}>Closed</button>
+                <button className={`ml-3 rounded-lg border-2 p-1 ${statusFilter === '' ? 'rounded-lg border-2 border-blue-500 p-1' : 'p-1'}`} onClick={() => setStatusFilter('')}>All</button>
             </div>
             <div className="border"/>
             <div className="mt-3">
@@ -63,7 +61,7 @@ export default function FilterOptions(
                     setStatusFilter('')
                     setTypeFilter('')
                 }}
-                className="ml-3 p-1 border-2 rounded-lg ml-7">
+                className="ml-7 rounded-lg border-2 p-1">
                 Clear All
             </button>
             </div>

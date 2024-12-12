@@ -27,10 +27,10 @@ export const backend_tasks = async (allData: SampleData) => {
     let lowC = 0, normalC = 0, highC = 0;
     let timeTotal = 0
     let satScore = ""
-    let highestTime = 0
+    const highestTime = 0
     // Custom tasks: Number of tasks per assignee and organization
-    let assigneeTasks: { name: string; tasks: number }[] = []
-    let orgTasks: { name: string; tasks: number }[] = []
+    const assigneeTasks: { name: string; tasks: number }[] = []
+    const orgTasks: { name: string; tasks: number }[] = []
     allData.results.forEach(issue => {
         if (issue.type === 'problem' || issue.type === 'incident') problemC++;
         if (issue.type === 'question') questionC++;
@@ -76,7 +76,7 @@ export const backend_tasks = async (allData: SampleData) => {
 
     // Finish up on tasks
     // Should be 500, but we'll check the length and compare with that anyway
-    let totalC = allData.results.length
+    const totalC = allData.results.length
 
     const problemP = ((problemC / totalC) * 100).toFixed(1);
     const questionP = ((questionC / totalC) * 100).toFixed(1);

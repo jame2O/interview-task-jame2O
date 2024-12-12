@@ -6,7 +6,7 @@ export default function SearchBar({searchInput, setSearchInput}:{searchInput: st
         const checkBounceback = setTimeout(() => {
             console.log(textChanged)
             setSearchInput(textChanged);
-        }, 500);
+        }, 500);   
 
         return () => {
             clearTimeout(checkBounceback)
@@ -17,7 +17,7 @@ export default function SearchBar({searchInput, setSearchInput}:{searchInput: st
             id="message" 
             style={{resize: "none"}}
             rows={1} 
-            className="max-w-xs mx-auto block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="mx-auto block w-full max-w-xs rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
             placeholder="Search by Organization ID..."
             onChange={e => {
                 setTextChanged(e.target.value)}}

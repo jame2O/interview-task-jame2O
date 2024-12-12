@@ -1,34 +1,7 @@
-import { useEffect, useState } from 'react';
-import { SampleData } from "api/types";
-import axios from 'axios';
-
 export default function BackendTasks() {
-    const [data, setData] = useState<any>(undefined);
-    useEffect(() => {
-        let mounted = true;
-        const fetchData = async () => {
-            if (mounted) {
-                try {
-                    const response = await axios.get<SampleData>('/api/insights/data', {
-                        params: {
-                            datapoints: 500,
-                            type: "",
-                            priority: "",
-                            status: "",
-                        }
-                    })
-                    setData(response.data);
-                } catch (error) {
-                    console.error('Failed to fetch data', error);
-                    return;
-                }
-            }
-        }
-        fetchData();
-    }, [])
     return (
         <>
-            <div className="border-2 border-grey-500 p-2 rounded-lg bg-gray-100">
+            <div className="rounded-lg border-2 border-gray-500 bg-gray-100 p-2">
                 <a href={`/api/insights/data?datapoints=500&type=&priority=&status=`}>
                     <button>Show backend tasks</button>
                 </a>

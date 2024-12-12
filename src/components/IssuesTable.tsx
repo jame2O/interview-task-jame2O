@@ -9,17 +9,14 @@ import {CopyToClipboard} from 'react-copy-to-clipboard'
 import { Tooltip } from 'react-tooltip'
 //Importing FA Icons
 
-import { faCircle } from '@fortawesome/free-solid-svg-icons'
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { faCircleStop } from "@fortawesome/free-solid-svg-icons";
-import { faCircleXmark } from "@fortawesome/free-solid-svg-icons/faCircleXmark";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
-import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { faListCheck } from "@fortawesome/free-solid-svg-icons";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
-import { faCopy } from "@fortawesome/free-solid-svg-icons"
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
@@ -46,42 +43,48 @@ export default function IssuesTable() {
                     }
                 })
                 if (mounted) {
-                    // Sort the data here
-                    const prioritiesAsInt: any = { "low": 1, "normal": 2, "high": 3 }
+                    // Do sorting here
+                    const prioritiesAsInt: {"low": number, "normal": number, "high": number} = { "low": 1, "normal": 2, "high": 3 }
                     const sortedData = {
                         ...allData,
-                        issues: allData.results.sort((a, b) => prioritiesAsInt[a.priority] - prioritiesAsInt[b.priority]).reverse()
+                        issues: allData.results.sort((a, b) => prioritiesAsInt[a.priority as keyof typeof prioritiesAsInt] - prioritiesAsInt[b.priority as keyof typeof prioritiesAsInt]).reverse()
                     }
-                    console.log(sortedData)
                     setData(sortedData)
+                    //By default, filtered data just contains all of the sorted data.
                     setFilteredData(sortedData)
                 }
             } catch (error) {
+                // Hopefully this doesn't happen
                 console.error('Failed to fetch data', error);
             }
         }
         fetchData();
-                                                  
+        //Cleanup on unmount                             
         return () => { mounted = false; }
     }, [])
     const applyFilter = () => {
         // Apply the filter based on filter conditions
         if (data) {
-            console.log(new Date(data.results[0].due))
             const filtered = data.results.filter(issue => {
-                return (typeFilter ? issue.type === typeFilter : true)
-                    && (priorityFilter ? issue.priority === priorityFilter : true)
-                    && (statusFilter ? issue.status === statusFilter : true)
-                    && (searchInput ? issue.organization_id.includes(searchInput) : true)
+                return (typeFilter ? issue.type === typeFilter : true) // Type checks
+                    && (priorityFilter ? issue.priority === priorityFilter : true) //Priority checks
+                    && (statusFilter ? issue.status === statusFilter : true) // Status checks
+                    && (searchInput ? issue.organization_id.includes(searchInput) : true) // Search Bar (org id) checks
             });
-            setFilteredData({ results: filtered });
+            setFilteredData({ results: filtered }); //Update the f.data state once were done
         }
     }
+    // Checks if any of the filters have been changed, then applies the new filter 
     useEffect(() => {
-        applyFilter();
+        let mounted = true;
+        if (mounted) {
+            applyFilter();
+        }
+        //Cleanup on unmount
+        return () => { mounted = false; }
     }, [typeFilter, priorityFilter, statusFilter, searchInput]);
-    // Calculate the counts for status, 
 
+    // Calculate the counts for status (probably could have done this better)
     // Status counts
     const openCount = filteredData?.results.filter(issue => issue.status === 'open' || issue.status === 'new').length || 0;
     const pendingCount = filteredData?.results.filter(issue => issue.status === 'pending' || issue.status === "hold").length || 0;
@@ -123,7 +126,7 @@ export default function IssuesTable() {
         <>
             <div style={styles}>
 
-                <div className="flex justify-between mb-5">
+                <div className="mb-5 flex justify-between">
                     <TicketOverview title="Status" props={[
                         {
                             name: "Open / New",
@@ -199,14 +202,14 @@ export default function IssuesTable() {
                         },
                     ]}/>
                 </div>
-                <div className="flex items-center space-x-4 mb-4">
+                <div className="mb-4 flex items-center space-x-4">
                     <button 
                         onClick={() => setShowFilterPopup(!showFilterPopup)}
-                        className="bg-blue-500 text-white px-3 py-1 rounded-lg">
+                        className="rounded-lg bg-blue-500 px-3 py-1 text-white">
                         <FontAwesomeIcon icon={faFilter} size="2x"/>
                         </button>
                     {showFilterPopup && (
-                        <div className="absolute top-4 p-4 rounded">
+                        <div className="absolute top-4 rounded p-4">
                             <FilterOptions
                                 typeFilter={typeFilter}
                                 setTypeFilter={setTypeFilter}
@@ -224,8 +227,8 @@ export default function IssuesTable() {
                         setSearchInput={setSearchInput}    
                     />
                 </div>
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead className="text xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                    <thead className="bg-gray-50 text-sm uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th className="px-6 py-3">{`Issue (Total: ${filteredData?.results.length})`}</th>
                             <th className="px-6 py-3">Type</th>
@@ -241,7 +244,7 @@ export default function IssuesTable() {
                     <tbody>
                         {filteredData && filteredData.results.length > 0 ? (
                             filteredData.results.map((issue) => (
-                            <tr key={issue.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <tr key={issue.id} className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
                                 <td className="px-6 py-4">{capitalise(issue.subject)}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.type)}</td>
                                 <td className={`whitespace-nowrap px-6 py-4 text-sm font-bold ${getPriorityColour(issue.priority)}`}>{capitalise(issue.priority)}</td>
@@ -266,7 +269,7 @@ export default function IssuesTable() {
                                             Due Date: ${issue.due}`}
     
                                         >
-                                        <button className="bg-blue-500 text-white px-2 py-1 rounded">
+                                        <button className="rounded bg-blue-500 px-2 py-1 text-white">
                                             <FontAwesomeIcon icon={faCopy} />
                                         </button>
                                     </CopyToClipboard>
@@ -276,7 +279,7 @@ export default function IssuesTable() {
                         ))
                         ) : ( 
                             <tr>
-                                <td colSpan={9} className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 font-bold">No data from selected filters.</td>
+                                <td colSpan={9} className="whitespace-nowrap px-6 py-4 text-sm font-bold text-gray-500">No data from selected filters.</td>
                             </tr>
                         )}
 
