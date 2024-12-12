@@ -26,15 +26,17 @@ export default function FilterOptions(
             <div className="p-3 space-x-2">
                 <p className="font-bold">Priority</p>
                 <button className="ml-3" onClick={() => setPriorityFilter('high')}>High</button>
-                <button className="" onClick={() => setPriorityFilter('medium')}>Medium</button>
+                <button className="" onClick={() => setPriorityFilter('normal')}>Normal</button>
                 <button className="" onClick={() => setPriorityFilter('low')}>Low</button>
                 <button className="" onClick={() => setPriorityFilter('')}>All</button>
             </div>
             <div className="p-3 space-x-2">
                 <p className="font-bold">Status</p>
                 <button className="ml-3" onClick={() => setStatusFilter('open')}>Open</button>
+                <button className="ml-3" onClick={() => setStatusFilter('new')}>New</button>
                 <button className="" onClick={() => setStatusFilter('pending')}>Pending</button>
-                <button className="" onClick={() => setStatusFilter('closed')}>Closed / Solved</button>
+                <button className="ml-3" onClick={() => setStatusFilter('solved')}>Solved</button>
+                <button className="" onClick={() => setStatusFilter('closed')}>Closed</button>
                 <button className="" onClick={() => setStatusFilter('')}>All</button>
             </div>
         </div>

@@ -81,8 +81,8 @@ export default function PriorityIssues() {
     const taskCount = filteredData?.results.filter(issue => issue.type === 'task').length || 0;
 
     const lowCount = filteredData?.results.filter(issue => issue.priority === 'low').length || 0;
-    const normalCount = filteredData?.results.filter(issue => issue.priority === 'question').length || 0;
-    const highCount = filteredData?.results.filter(issue => issue.priority === 'task').length || 0;
+    const normalCount = filteredData?.results.filter(issue => issue.priority === 'normal').length || 0;
+    const highCount = filteredData?.results.filter(issue => issue.priority === 'high').length || 0;
 
     const capitalise = (str: string) => {
         return str.charAt(0).toUpperCase() + str.slice(1)
@@ -205,7 +205,6 @@ export default function PriorityIssues() {
 
                     </tbody>
                 </table>
-                <div>Total Issues: {data.results.length}</div>
             </div>
         </>
     )
