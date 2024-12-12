@@ -1,31 +1,33 @@
 import { useState, useEffect } from 'react';
 import DateTimePicker from 'react-datetime-picker';
-
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export default function FilterOptions(
     {typeFilter,
     setTypeFilter,
     priorityFilter,
     setPriorityFilter,
     statusFilter,
-    setStatusFilter}
+    setStatusFilter,
+    showFilterPopup,
+    setShowFilterPopup}
 : { typeFilter: string,
     setTypeFilter: (type: string) => void,
     priorityFilter: string
     setPriorityFilter: (priority: string) => void,
     statusFilter: string,
     setStatusFilter: (status: string) => void,
-
+    showFilterPopup: boolean
+    setShowFilterPopup: ((b: boolean) => void)
 } ) {
     return (
         
         <div className="bg-white shadow-lg p-4 rounded">
             <div className="flex justify-between">
                 <h1 className="font-bold italic">Add Filters</h1>
-                <button  onClick={() => {
-                    setPriorityFilter('')
-                    setStatusFilter('')
-                    setTypeFilter('')
-                }}>Clear All</button>
+                <button onClick={() => setShowFilterPopup(!showFilterPopup)}>
+                    <FontAwesomeIcon icon={faXmark} />
+                </button>
             </div>
             
             <div className="p-3 space-x-4">
@@ -54,6 +56,18 @@ export default function FilterOptions(
                 <button className={`ml-3 p-1 border-2 rounded-lg ${statusFilter === '' ? 'p-1 border-2 border-blue-500 rounded-lg' : 'p-1'}`} onClick={() => setStatusFilter('')}>All</button>
             </div>
             <div className="border"/>
+            <div className="mt-3">
+            <button  
+                onClick={() => {
+                    setPriorityFilter('')
+                    setStatusFilter('')
+                    setTypeFilter('')
+                }}
+                className="ml-3 p-1 border-2 rounded-lg ml-7">
+                Clear All
+            </button>
+            </div>
+            
         </div>  
     )
 }

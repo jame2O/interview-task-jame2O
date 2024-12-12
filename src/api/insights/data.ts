@@ -18,7 +18,6 @@ export const GET = async (req: Request, res: Response) => {
 
 
 export const backend_tasks = async (allData: SampleData) => {
-    // Step 1: Get Data:
     if (!allData) {
         console.error('No data recieved')
         return;
@@ -29,9 +28,9 @@ export const backend_tasks = async (allData: SampleData) => {
     let timeTotal = 0
     let satScore = ""
     let highestTime = 0
-    // Custom task: Number of tasks per assignee
+    // Custom tasks: Number of tasks per assignee and organization
     let assigneeTasks: { name: string; tasks: number }[] = []
-
+    let orgTasks: { name: string; tasks: number }[] = []
     allData.results.forEach(issue => {
         if (issue.type === 'problem' || issue.type === 'incident') problemC++;
         if (issue.type === 'question') questionC++;
@@ -58,12 +57,19 @@ export const backend_tasks = async (allData: SampleData) => {
         }
         timeTotal += minuteDifference;
 
-        //Custom Task:
+        //Custom Task: Get assignee tasks counts
         const assignee = assigneeTasks.find(assignee => assignee.name === issue.assignee_id)
         if (assignee) {
             assignee.tasks++
         } else {
             assigneeTasks.push({name: issue.assignee_id, tasks: 1})
+        }
+        //Custom Task: Get organization tasks counts
+        const org = orgTasks.find(org => org.name === issue.organization_id)
+        if (org) {
+            org.tasks++
+        } else {
+            orgTasks.push({name: issue.organization_id, tasks: 1})
         }
         
     });
@@ -78,13 +84,13 @@ export const backend_tasks = async (allData: SampleData) => {
 
     const lowP = ((lowC / totalC) * 100).toFixed(1);
     const normalP = ((normalC / totalC) * 100).toFixed(1);
-    const highP = ((highC / totalC) * 100).toFixed(1);;
+    const highP = ((highC / totalC) * 100).toFixed(1);
 
     const averageClosingTimeMins = (timeTotal / totalC).toFixed(1);
 
     //Now constructing the JSON to return
     const result = {
-        average_closing_time: averageClosingTimeMins,
+        average_high_priority_closing_time_minutes: averageClosingTimeMins,
         type_percentages: {
             problem: problemP,
             question: questionP,
@@ -96,7 +102,8 @@ export const backend_tasks = async (allData: SampleData) => {
             high: highP,
         },
         longest_close_satisfaction_score: satScore,
-        assignee_tasks: assigneeTasks
+        assignee_tasks: assigneeTasks,
+        org_tasks: orgTasks
     }
     return (result);
     

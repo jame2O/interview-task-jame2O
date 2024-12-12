@@ -28,10 +28,11 @@ export default function BackendTasks() {
     }, [])
     return (
         <>
-            <div className="mt-5">
-                Result of backend tasks (500 datapoints):
+            <div>
+                <a href={`/api/insights/data?datapoints=500&type=&priority=&status=`}>
+                    <button>Show backend tasks</button>
+                </a>
             </div>
-            <pre className="text-md whitespace-pre-wrap">{JSON.stringify(data, null, 2)}</pre>
         </>
     )
 }

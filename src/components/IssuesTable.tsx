@@ -205,7 +205,7 @@ export default function IssuesTable() {
                         <FontAwesomeIcon icon={faFilter} size="2x"/>
                         </button>
                     {showFilterPopup && (
-                        <div className="absolute  p-4 rounded">
+                        <div className="absolute top-4 p-4 rounded">
                             <FilterOptions
                                 typeFilter={typeFilter}
                                 setTypeFilter={setTypeFilter}
@@ -213,6 +213,8 @@ export default function IssuesTable() {
                                 setStatusFilter={setStatusFilter}
                                 statusFilter={statusFilter}
                                 setPriorityFilter={setPriorityFilter}
+                                setShowFilterPopup={setShowFilterPopup}
+                                showFilterPopup={showFilterPopup}
                             />
                         </div>
                     )}
