@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import DateTimePicker from 'react-datetime-picker';
 
 export default function FilterOptions(
     {typeFilter,
@@ -13,6 +14,7 @@ export default function FilterOptions(
     setPriorityFilter: (priority: string) => void,
     statusFilter: string,
     setStatusFilter: (status: string) => void,
+
 } ) {
     return (
         
@@ -51,6 +53,7 @@ export default function FilterOptions(
                 <button className={`ml-3 p-1 border-2 rounded-lg ${statusFilter === 'closed' ? 'p-1 border-2 border-blue-500 rounded-lg' : 'p-1'}`} onClick={() => setStatusFilter('closed')}>Closed</button>
                 <button className={`ml-3 p-1 border-2 rounded-lg ${statusFilter === '' ? 'p-1 border-2 border-blue-500 rounded-lg' : 'p-1'}`} onClick={() => setStatusFilter('')}>All</button>
             </div>
-        </div>
+            <div className="border"/>
+        </div>  
     )
 }

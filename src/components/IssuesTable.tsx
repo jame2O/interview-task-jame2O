@@ -5,7 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FilterOptions from "./FilterOptions";
 import SearchBar from "./SearchBar";
 import TicketOverview from "./TicketOverview";
-
+import {CopyToClipboard} from 'react-copy-to-clipboard'
+import { Tooltip } from 'react-tooltip'
 //Importing FA Icons
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
@@ -18,6 +19,9 @@ import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { faListCheck } from "@fortawesome/free-solid-svg-icons";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { faCopy } from "@fortawesome/free-solid-svg-icons"
+import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 
 export default function IssuesTable() {
     const [data, setData] = useState<SampleData | null>(null)
@@ -26,6 +30,7 @@ export default function IssuesTable() {
     const [statusFilter, setStatusFilter] = useState<string>('')
     const [priorityFilter, setPriorityFilter] = useState<string>('')
     const [showFilterPopup, setShowFilterPopup] = useState<boolean>(false);
+
     const [searchInput, setSearchInput] = useState('')
     useEffect(() => {
         let mounted = true;
@@ -59,8 +64,9 @@ export default function IssuesTable() {
         return () => { mounted = false; }
     }, [])
     const applyFilter = () => {
-        // Apply the filter
+        // Apply the filter based on filter conditions
         if (data) {
+            console.log(new Date(data.results[0].due))
             const filtered = data.results.filter(issue => {
                 return (typeFilter ? issue.type === typeFilter : true)
                     && (priorityFilter ? issue.priority === priorityFilter : true)
@@ -74,25 +80,27 @@ export default function IssuesTable() {
         applyFilter();
     }, [typeFilter, priorityFilter, statusFilter, searchInput]);
     // Calculate the counts for status, 
-    const openCount = filteredData?.results.filter(issue => issue.status === 'open' || issue.status === 'new').length || 0;
-    const pendingCount = filteredData?.results.filter(issue => issue.status === 'pending').length || 0;
-    const closedCount = filteredData?.results.filter(issue => issue.status === 'closed'  || issue.status === 'solved').length || 0;
 
-    const problemCount = filteredData?.results.filter(issue => issue.type === 'problem').length || 0;
+    // Status counts
+    const openCount = filteredData?.results.filter(issue => issue.status === 'open' || issue.status === 'new').length || 0;
+    const pendingCount = filteredData?.results.filter(issue => issue.status === 'pending' || issue.status === "hold").length || 0;
+    const closedCount = filteredData?.results.filter(issue => issue.status === 'closed'  || issue.status === 'solved').length || 0;
+    // Type counts
+    const problemCount = filteredData?.results.filter(issue => issue.type === 'problem' || issue.type === 'incident').length || 0;
     const questionCount = filteredData?.results.filter(issue => issue.type === 'question').length || 0;
     const taskCount = filteredData?.results.filter(issue => issue.type === 'task').length || 0;
-
+    // Priority counts
     const lowCount = filteredData?.results.filter(issue => issue.priority === 'low').length || 0;
     const normalCount = filteredData?.results.filter(issue => issue.priority === 'normal').length || 0;
     const highCount = filteredData?.results.filter(issue => issue.priority === 'high').length || 0;
 
+    const goodCount = filteredData?.results.filter(issue => issue.satisfaction_rating.score === 'good').length || 0;
+    const badCount = filteredData?.results.filter(issue => issue.satisfaction_rating.score === 'bad').length || 0;
+
     const capitalise = (str: string) => {
         return str.charAt(0).toUpperCase() + str.slice(1)
     }
-    //Event listener to hide the filter component if a user clicks off
-    useEffect(() => {
 
-    })
     //Case function for determining colour of priority column values in table
     const getPriorityColour = (priority: string) => {
         switch (priority) {
@@ -117,19 +125,19 @@ export default function IssuesTable() {
                 <div className="flex justify-between mb-5">
                     <TicketOverview title="Status" props={[
                         {
-                            name: "Open",
+                            name: "Open / New",
                             icon: faCircleInfo,
                             iconColour: "#CC0000",
                             count: openCount
                         },
                         {
-                            name: "Pending",
+                            name: "Pending / Hold",
                             icon: faCircleStop,
                             iconColour: "#FEBE10",
                             count: pendingCount
                         },
                         {
-                            name: "Closed",
+                            name: "Closed / Solved",
                             icon: faCircleCheck,
                             iconColour: "green",
                             count: closedCount
@@ -137,7 +145,7 @@ export default function IssuesTable() {
                     ]}/>
                     <TicketOverview title="Type" props={[
                         {
-                            name: "Problem",
+                            name: "Problem / Incident",
                             icon: faTriangleExclamation,
                             iconColour: '#CC0000',
                             count: problemCount
@@ -175,11 +183,25 @@ export default function IssuesTable() {
                             count: highCount
                         },
                     ]}/>
+                    <TicketOverview title="Satisfaction Rating" props={[
+                        {
+                            name: "Good",
+                            icon: faThumbsUp,
+                            iconColour: "green",
+                            count: goodCount
+                        },
+                        {
+                            name: "Bad",
+                            icon: faThumbsDown,
+                            iconColour: "#CC0000",
+                            count: badCount
+                        },
+                    ]}/>
                 </div>
                 <div className="flex items-center space-x-4 mb-4">
                     <button 
                         onClick={() => setShowFilterPopup(!showFilterPopup)}
-                        className="top-0 right-0 bg-blue-500 text-white px-4 py-2 rounded">
+                        className="bg-blue-500 text-white px-3 py-1 rounded-lg">
                         <FontAwesomeIcon icon={faFilter} size="2x"/>
                         </button>
                     {showFilterPopup && (
@@ -202,15 +224,16 @@ export default function IssuesTable() {
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th className="px-6 py-3">Issue</th>
+                            <th className="px-6 py-3">{`Issue (Total: ${filteredData?.results.length})`}</th>
                             <th className="px-6 py-3">Type</th>
                             <th className="px-6 py-3">Priority</th>
                             <th className="px-6 py-3">Status</th>
                             <th className="px-6 py-3">Assignee</th>
                             <th className="px-6 py-3">Organiztion ID</th>
-                            <th className="px-6 py-3">Created On</th>
+                            <th className="px-6 py-3">Satisfaction Rating</th>
+                            <th className="px-6 py-3">Date Created</th>
+                            <th className="px-6 py-3">Date Due</th>
                         </tr>
-                        <th colSpan={1} className="whitespace-nowrap px-6 py-4 text-base text-gray-500 font-bold">Total Issues: {filteredData?.results.length}</th>
                     </thead>
                     <tbody>
                         {filteredData && filteredData.results.length > 0 ? (
@@ -222,12 +245,35 @@ export default function IssuesTable() {
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.status)}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.assignee_id)}</td>
                                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.organization_id)}</td>
-                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.created)}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{capitalise(issue.satisfaction_rating.score)}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{(issue.created)}</td>
+                                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{(issue.due)}</td>
+                                <td className="px-6 py-4">
+                                    <CopyToClipboard 
+                                        data-tooltip-id="cc_tooltip" 
+                                        data-tooltip-content="Copy to Clipboard"
+                                        data-tooltip-place="top" 
+                                        text={`Subject: ${issue.subject}, 
+                                            Type: ${issue.type}, 
+                                            Priority: ${issue.priority}, 
+                                            Status: ${issue.status}, 
+                                            Assignee ID: ${issue.assignee_id}, 
+                                            Organization ID: ${issue.organization_id}, 
+                                            Date created:${issue.created}
+                                            Due Date: ${issue.due}`}
+    
+                                        >
+                                        <button className="bg-blue-500 text-white px-2 py-1 rounded">
+                                            <FontAwesomeIcon icon={faCopy} />
+                                        </button>
+                                    </CopyToClipboard>
+                                    <Tooltip id="cc_tooltip" />
+                                </td>
                             </tr>
                         ))
                         ) : ( 
                             <tr>
-                                <td colSpan={7} className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 font-bold">No data from selected filters.</td>
+                                <td colSpan={9} className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 font-bold">No data from selected filters.</td>
                             </tr>
                         )}
 

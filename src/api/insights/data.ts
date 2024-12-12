@@ -29,12 +29,14 @@ export const backend_tasks = async (allData: SampleData) => {
     let timeTotal = 0
     let satScore = ""
     let highestTime = 0
+    // Custom task: Number of tasks per assignee
+    let assigneeTasks: { name: string; tasks: number }[] = []
 
     allData.results.forEach(issue => {
-        if (issue.type === 'problem') problemC++;
+        if (issue.type === 'problem' || issue.type === 'incident') problemC++;
         if (issue.type === 'question') questionC++;
         if (issue.type === 'task') taskC++;
-
+ 
         if (issue.priority === 'low') lowC++;
         if (issue.priority === 'normal') normalC++;
         if (issue.priority === 'high') highC++;
@@ -55,6 +57,15 @@ export const backend_tasks = async (allData: SampleData) => {
             satScore = issue.satisfaction_rating.score
         }
         timeTotal += minuteDifference;
+
+        //Custom Task:
+        const assignee = assigneeTasks.find(assignee => assignee.name === issue.assignee_id)
+        if (assignee) {
+            assignee.tasks++
+        } else {
+            assigneeTasks.push({name: issue.assignee_id, tasks: 1})
+        }
+        
     });
 
     // Finish up on tasks
@@ -72,7 +83,6 @@ export const backend_tasks = async (allData: SampleData) => {
     const averageClosingTimeMins = (timeTotal / totalC).toFixed(1);
 
     //Now constructing the JSON to return
-
     const result = {
         average_closing_time: averageClosingTimeMins,
         type_percentages: {
@@ -85,7 +95,9 @@ export const backend_tasks = async (allData: SampleData) => {
             medium: normalP,
             high: highP,
         },
-        longest_close_satisfaction_score: satScore
+        longest_close_satisfaction_score: satScore,
+        assignee_tasks: assigneeTasks
     }
-    return (result)
+    return (result);
+    
 }
